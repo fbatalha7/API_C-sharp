@@ -1,0 +1,55 @@
+﻿@using APP.Domain.Entities;
+@model List<Usuarios>
+@{
+    ViewData["Title"] = "Cadastro de Usuarios";
+}
+
+<h1>Pessoas</h1>
+
+
+<h2>Lista de Usuários</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.Id</td>
+                <td>@usuario.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<h1>Lista de Itens</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th> <a asp-action="Create" class="btn btn-primary">Inserir Usuário</a> </th>
+              
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
