@@ -1,0 +1,79 @@
+﻿@model APP.Domain.Entities.Usuarios
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Usuarios</h4>
+<div id="resultado"></div>
+
+<form method="post" action="Edit">
+    <div class="form-group">
+        <label for="cep">CEP</label>
+        <input type="number" pattern="[0-9]" id="cep" name="cep" class="form-control" maxlength="8" />
+    </div>
+    <div class="form-group">
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" name="logradouro" readonly class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" name="bairro" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="localidade">Localidade</label>
+        <input type="text" id="localidade" name="localidade" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="uf">UF</label>
+        <input type="text" id="uf" name="uf" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+
+</form>
+<div>
+
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    const cepInput = document.getElementById("cep");
+
+    cepInput.addEventListener("input", function() {
+        const cep = cepInput.value;
+        console.log(cep);
+        if (cep.length === 8) { // Certifique-se de que o CEP tenha 8 dígitos
+            cap = cep.value;
+            realizarRequisicaoAPI(cep);
+        }
+    });
+
+
+    function realizarRequisicaoAPI(cep) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("logradouro").value = data.logradouro;
+                document.getElementById("bairro").value = data.bairro;
+                document.getElementById("localidade").value = data.localidade;
+                document.getElementById("uf").value = data.uf;
+            })
+            .catch(error => {
+                document.getElementById("logradouro").value = null;
+                document.getElementById("bairro").value = null;
+                document.getElementById("localidade").value = null;
+                document.getElementById("uf").value = null;
+                resultadoDiv.innerHTML = "Erro ao consultar o CEP.";
+                console.error(error);
+            });
+    }
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
