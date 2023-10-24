@@ -7,32 +7,88 @@
 <h1>Create</h1>
 
 <h4>Usuarios</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<h4>@Model?.Erro</h4>
 
+<form method="post" action="Create">
+    <div class="form-group">
+        <label for="id">Id</label>
+        <input type="number" id="id" name="id" class="form-control" value=@Model?.Id />
+    </div>
+
+    <div class="form-group">
+        <label for="Nome">Nome</label>
+        <input type="text" id="Nome" name="Nome" class="form-control" value=@Model?.Nome />
+    </div>
+
+    <div class="form-group">
+        <label for="Idade">Idade</label>
+        <input type="number" pattern="[0-9]" id="Idade" name="Idade" class="form-control" value=@Model?.Idade />
+    </div>
+
+    <div class="form-group">
+        <label for="cep">CEP</label>
+        <input type="number" pattern="[0-9]" id="cep" name="cep" class="form-control" maxlength="8" value=@Model?.Cep />
+    </div>
+    <div class="form-group">
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" name="logradouro" readonly class="form-control" value=@Model?.Logradouro />
+    </div>
+    <div class="form-group">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" name="bairro" class="form-control" value=@Model?.Bairro />
+    </div>
+    <div class="form-group">
+        <label for="localidade">Localidade</label>
+        <input type="text" id="localidade" name="localidade" class="form-control" value=@Model?.Localidade />
+    </div>
+    <div class="form-group">
+        <label for="uf">UF</label>
+        <input type="text" id="uf" name="uf" class="form-control" value=@Model?.Uf />
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+
+</form>
 <div>
+
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script>
+    const cepInput = document.getElementById("cep");
+
+    cepInput.addEventListener("input", function () {
+        const cep = cepInput.value;
+        console.log(cep);
+        if (cep.length === 8) { // Certifique-se de que o CEP tenha 8 dígitos
+            cap = cep.value;
+            realizarRequisicaoAPI(cep);
+        }
+    });
+
+
+    function realizarRequisicaoAPI(cep) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("logradouro").value = data.logradouro;
+                document.getElementById("bairro").value = data.bairro;
+                document.getElementById("localidade").value = data.localidade;
+                document.getElementById("uf").value = data.uf;
+            })
+            .catch(error => {
+                document.getElementById("logradouro").value = null;
+                document.getElementById("bairro").value = null;
+                document.getElementById("localidade").value = null;
+                document.getElementById("uf").value = null;
+                resultadoDiv.innerHTML = "Erro ao consultar o CEP.";
+                console.error(error);
+            });
+    }
+</script>
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

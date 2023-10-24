@@ -55,7 +55,7 @@ namespace API_ASP_NET.Controllers
         }
 
         // POST api/Usuarios/InsertUser
-        [HttpPost("InsertUser")]
+        [HttpPost("InsertUsuario")]
         public IActionResult InsertUser([FromBody] Usuarios user)
         {
             if (user == null)
@@ -65,14 +65,15 @@ namespace API_ASP_NET.Controllers
         }
 
         //// PUT api/<UsuariosController>/5
-        [HttpPut("UpdateUsuario/{id}")]
-        public IActionResult UpdateUser([FromBody] Usuarios user)
+        [HttpPut("UpdateUsuario")]
+        public IActionResult UpdateUsuario([FromBody] Usuarios user)
         {
             if (user == null)
                 return NotFound();
 
             return Execute(() => _usuariosService.Update<UsuarioValidator>(user));
         }
+
         private IActionResult Execute(Func<object> func)
         {
             try
@@ -81,11 +82,18 @@ namespace API_ASP_NET.Controllers
 
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (FluentValidation.ValidationException ex)
             {
-                var a = ((FluentValidation.ValidationException)ex).Errors;
-               
-                return BadRequest(ex.GetBaseException().Message);
+                var a = ex.Errors;
+                string errors = string.Empty;
+                foreach (var error in a)
+                {                 
+                    if (error != null)
+                    {
+                        errors += error.ErrorMessage + "\n";
+                    }
+                }
+                return BadRequest(errors);
                 //return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException().Message);
             }
         }

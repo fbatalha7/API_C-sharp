@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using APP.Domain.Entities;
+using APP.CadastroUsuario.Models;
 using System.Text.Json;
-using System.Text;
 
 namespace APP.CadastroUsuario.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private HttpClient _httpclient;
+        private ConnectionApi _Request;
 
-        public HomeController(ILogger<HomeController> logger, HttpClient httpclient)
+        public HomeController(ConnectionApi connectionApi)
         {
-            _logger = logger;
-            _httpclient = httpclient;
+            this._Request = connectionApi;
         }
-
         public IActionResult Index()
         {
             try
             {
-                List<Usuarios>? Lista = GetAsync("/Usuarios/GetUsuarios").Result;
+                List<Usuarios>? Lista = _Request.ListaDeUsuarios();
 
                 return View(Lista);
             }
@@ -33,49 +30,37 @@ namespace APP.CadastroUsuario.Controllers
         }
         public IActionResult Create()
         {
-
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Usuarios item)
-        {
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-
-
-            return View();
-        }
-        public IActionResult Edit(int id)
-        {
-            List<Usuarios> Lista = GetAsync("/Usuarios/GetUsuarios").Result;
-            Usuarios? item = Lista?.FirstOrDefault(x => x.Id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return View(item);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Edit(Usuarios item)
+        public async Task<ActionResult> Create(Usuarios item)
         {
             try
             {
-                item.Id = 1;
-                item.Name = "Teste";
-
-                 var Update = await EnviarPutAsync(Convert.ToInt32(item.Id),item);
-
-               
-                //if (!TaskUpdateUser.IsCompletedSuccessfully)
-                //    throw new Exception("Erro Ao Atulizar o Usuario!");
+                var Insert = await _Request.PostAsync(item);
+                Insert.EnsureSuccessStatusCode();
 
                 return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                
+                item.Erro = ex.Message;
+                return View("Create", item);
+            }
+        }
+        [HttpPost]
+        public IActionResult EditUsuario(int id)
+        {
+            try
+            {
+                Usuarios? item = _Request.UsuarioById(id);
+                if (item == null)
+                {
+                    return NotFound();
+                }
+
+                return View(item);
             }
             catch (Exception ex)
             {
@@ -83,85 +68,19 @@ namespace APP.CadastroUsuario.Controllers
                 throw new Exception(ex.Message);
             }
         }
-
-        [HttpGet]
-        public async Task<List<Usuarios>> GetAsync(string ServiceGet)
+        [HttpPost]
+        public async Task<ActionResult> Edit(Usuarios item)
         {
             try
             {
-                var url = GetConexoes() + ServiceGet;
-
-                List<Usuarios>? result = new List<Usuarios>();
-
-                var response = new HttpResponseMessage();
-
-                using (HttpClient client = new HttpClient())
-                {
-                    response = await client.GetAsync(url);
-                }
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var stringResponse = await response.Content.ReadAsStringAsync();
-
-                    result = JsonSerializer.Deserialize<List<Usuarios>>
-                       (stringResponse, new JsonSerializerOptions()
-                       {
-                           PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                       });
-                }
-                else
-                {
-                    throw new HttpRequestException(response.ReasonPhrase);
-                }
-
-                return result;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-        [HttpPut]
-        public async Task<string> EnviarPutAsync(int id, Usuarios dados)
-        {
-            try
-            {
-
-                var url = GetConexoes() + $"/Usuarios/UpdateUsuario";
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(dados);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpclient.PutAsync($"{url}/{id}", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return "PUT enviado com sucesso";
-                }
-                else
-                {
-                    return $"Erro ao enviar PUT: {response.StatusCode}";
-                }
+                var Update = await _Request.EnviarPutAsync(item);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return $"Erro inesperado: {ex.Message}";
+                item.Erro = ex.Message;
+                return View("EditUsuario", item);
             }
-        }
-
-
-        public String GetConexoes()
-        {
-            String apiUrl = string.Empty;
-            IConfigurationRoot opt = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            apiUrl = opt.GetConnectionString("ApiCadastroUsuario");
-
-            return apiUrl;
-        }
+        }     
     }
 }
