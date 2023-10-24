@@ -27,8 +27,8 @@ Ex:
 ## Passoa Alternativos
 
 #### Se a compilação na sua maquina retorna uma Conexão diferente de "https://localhost:7047":
-- Altere as rotas de "ConnectionStrings" no arquivo "appsettings.json" em API_C-sharp\API_ASP_NET.
-- <br>
-imagem
+Altere as rotas de "ConnectionStrings" no arquivo "appsettings.json" em API_C-sharp\API_ASP_NET.
+<br>
+![Img_prop](https://github.com/fbatalha7/API_C-sharp/blob/main/Img_App_Json.png)
 <br>
 
