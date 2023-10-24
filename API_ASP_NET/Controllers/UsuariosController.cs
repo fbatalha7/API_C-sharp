@@ -14,8 +14,6 @@ namespace API_ASP_NET.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-      
-        private List<Usuarios>? _dados;
         private IUsuariosService<Usuarios> _usuariosService;
         public UsuariosController(IUsuariosService<Usuarios> usuariosService)
         {
@@ -26,34 +24,15 @@ namespace API_ASP_NET.Controllers
         [HttpGet("GetUsuarios")]
         public IActionResult Get()
         {
-            try
-            {
-                 _dados = _usuariosService.SelectAll().ToList();
-
-                return Ok(_dados);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
+            return Execute(() => _usuariosService.SelectAll());
         }
 
         //GET api/Usuarios/{id}
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            try
-            {
-                var Usuario = _usuariosService.SelectById(id);
 
-                return Ok(Usuario);
-
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            return Execute(() => _usuariosService.SelectById(id));
         }
 
         // POST api/Usuarios/InsertUser
@@ -63,11 +42,9 @@ namespace API_ASP_NET.Controllers
             if (user == null)
                 return NotFound();
 
-            List<Usuarios> ListaUsuarios = _usuariosService.SelectAll().ToList();
-            var Exist =  ListaUsuarios.Exists(x=>x.Id == user.Id);
+            user.ProcessRequests(user.ChannelType);
 
-            if (Exist)
-                user.Id += 1000;
+            ValidationExistId(user);
 
             return Execute(() => _usuariosService.Insert<UsuarioValidator>(user));
         }
@@ -78,6 +55,8 @@ namespace API_ASP_NET.Controllers
         {
             if (user == null)
                 return NotFound();
+
+            user.ProcessRequests(user.ChannelType);
 
             return Execute(() => _usuariosService.Update<UsuarioValidator>(user));
         }
@@ -95,7 +74,7 @@ namespace API_ASP_NET.Controllers
                 var a = ex.Errors;
                 string errors = string.Empty;
                 foreach (var error in a)
-                {                 
+                {
                     if (error != null)
                     {
                         errors += error.ErrorMessage + "\n";
@@ -106,8 +85,15 @@ namespace API_ASP_NET.Controllers
             }
         }
 
+        private void ValidationExistId(Usuarios user)
+        {
+            List<Usuarios> ListaUsuarios = _usuariosService.SelectAll().ToList();
+            var Exist = ListaUsuarios.Exists(x => x.Id == user.Id);
 
-      
+            if (Exist || user.Id == 0 || user.Id == null)
+                user.Id += 1000;
+        }
+
     }
 }
 

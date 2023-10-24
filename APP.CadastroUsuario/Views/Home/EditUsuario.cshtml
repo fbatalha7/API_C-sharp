@@ -11,16 +11,18 @@
 <h4>Usuarios</h4>
 <h4>@Model?.Erro</h4>
 
-<form method="post" action="Edit">
+<form id="form" method="post" action="Edit">
     <div class="form-group row">
        <div class=" col-md-6">
             <label for="id">Id</label>
-            <input type="number" id="id" name="id" readonly class="form-control" value=@Model?.Id />
-       </div>
+            @Html.TextBoxFor(model => model.Id, new {@class = "form-control", @readonly = true})
 
+
+       </div>
+       
         <div class="col-md-6">
             <label for="Nome">Nome</label>
-            <input type="text" id="Nome" name="Nome" class="form-control" value=@Model?.Nome autocomplete="on" />
+            @Html.TextBoxFor(model => model.Nome, new {@class = "form-control", @required = true})
         </div>
     </div>
 
@@ -35,21 +37,24 @@
     </div>
     <div class="form-group">
         <label for="logradouro">Logradouro</label>
-        <input type="text" id="logradouro" name="logradouro" class="form-control" value=@Model?.Logradouro />
+        @Html.TextBoxFor(model => model.Logradouro, new {@class = "form-control", @id = "logradouro" })
+
     </div>
     <div class="form-group">
         <label for="bairro">Bairro</label>
-        <input type="text" id="bairro" name="bairro" class="form-control" value=@Model?.Bairro />
+        @Html.TextBoxFor(model => model.Bairro, new {@class = "form-control", @id = "bairro" })
+
     </div>
     <div class="form-group">
         <label for="localidade">Localidade</label>
-        <input type="text" id="localidade" readonly name="localidade" class="form-control" value=@Model?.Localidade />
+        @Html.TextBoxFor(model => model.Localidade, new {@class = "form-control", @id = "localidade", @readonly = true })
+
     </div>
     <div class="form-group">
         <label for="uf">UF</label>
-        <input type="text" id="uf" name="uf" readonly class="form-control" value=@Model?.Uf />
+        @Html.TextBoxFor(model => model.Uf, new {@class = "form-control", @id = "uf", @readonly = true })
     </div>
-    <button type="submit" class="btn btn-primary">Salvar</button>
+    <button id="btnSalvar" type="submit" class="btn btn-primary">Salvar</button>
 
 </form>
 
@@ -61,30 +66,41 @@
 <script>
     const cepInput = document.getElementById("cep");
 
+
     cepInput.addEventListener("input", function() {
         const cep = cepInput.value;
         console.log(cep);
         if (cep.length === 8) { // Certifique-se de que o CEP tenha 8 dígitos
             cap = cep.value;
             realizarRequisicaoAPI(cep);
+        }else{
+            EmptyInput();
         }
     });
 
+    function EmptyInput(){
+        document.getElementById("logradouro").value = null;
+        document.getElementById("bairro").value = null;
+        document.getElementById("localidade").value = null;
+        document.getElementById("uf").value = null;
+    }
 
     function realizarRequisicaoAPI(cep) {
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 document.getElementById("logradouro").value = data.logradouro;
                 document.getElementById("bairro").value = data.bairro;
                 document.getElementById("localidade").value = data.localidade;
                 document.getElementById("uf").value = data.uf;
+
+                if (data.erro === true) {
+                    EmptyInput();
+                }
             })
             .catch(error => {
-                document.getElementById("logradouro").value = null;
-                document.getElementById("bairro").value = null;
-                document.getElementById("localidade").value = null;
-                document.getElementById("uf").value = null;
+                EmptyInput();
                 resultadoDiv.innerHTML = "Erro ao consultar o CEP.";
                 console.error(error);
             });

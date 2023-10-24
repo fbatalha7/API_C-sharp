@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Mapping\" />
+    <Compile Remove="Context\**" />
+    <Compile Remove="Mapping\**" />
+    <EmbeddedResource Remove="Context\**" />
+    <EmbeddedResource Remove="Mapping\**" />
+    <None Remove="Context\**" />
+    <None Remove="Mapping\**" />
   </ItemGroup>
 
   <ItemGroup>
