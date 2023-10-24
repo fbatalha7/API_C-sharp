@@ -1,4 +1,7 @@
 # Aplicação Asp Net Core (Cadastro de Usuários) <h1>
+
+#### Solução Composta por duas aplicações que simulam dois canais diferentes.
+
 ## Documentação de abertura e compilação da aplicação
 
 ### Requisitos:
@@ -18,7 +21,7 @@ Ex:
 <br>
 ![Img_prop](https://github.com/fbatalha7/API_C-sharp/blob/main/Img_Propriedades_proj_Bemol.png)
 <br>
-2 - Compile e execute a aplicação
+2 - Compile e execute
 
 ## Passoa Alternativos
 
