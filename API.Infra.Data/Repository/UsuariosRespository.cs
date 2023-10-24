@@ -16,8 +16,8 @@ namespace API.Infra.Data.Repository
             {
                 ListaUsuarios = new List<Usuarios>()
                {
-                new Usuarios {Id = 1, Name = "Felipe" },
-                new Usuarios {Id = 2, Name = "Admin" }
+                new Usuarios {Id = 1, Nome = "Felipe" },
+                new Usuarios {Id = 2, Nome = "Admin" }
                };
 
             }
@@ -62,13 +62,14 @@ namespace API.Infra.Data.Repository
 
                 if (User_For_Update != null)
                 {
-                    User_For_Update.Name = user.Name;
+                    User_For_Update.Nome = user.Nome;
                     User_For_Update.Cep = user.Cep;
                     User_For_Update.Bairro = user.Bairro;
                     User_For_Update.Logradouro = user.Logradouro;
                     User_For_Update.Uf = user.Uf;
                     User_For_Update.Localidade = user.Localidade;
                     User_For_Update.Localidade = user.Localidade;
+                    User_For_Update.Idade = user.Idade;
                 }
             }
             catch (Exception)

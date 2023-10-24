@@ -1,8 +1,15 @@
+using API.Infra.Data.Repository;
+using API.Services.Services;
+using APP.CadastroUsuario.Models;
+using APP.Domain.Entities;
+using APP.Domain.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<ConnectionApi>();
 
 var app = builder.Build();
 

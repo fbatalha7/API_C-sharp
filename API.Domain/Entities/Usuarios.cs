@@ -1,18 +1,22 @@
 ﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace APP.Domain.Entities
 {
     public class Usuarios : BaseEntity
     {    
-        public String? Name { get; set; }
+        public String? Nome { get; set; }
+        public int Idade { get; set; }
         [JsonProperty("cep")]
         public string? Cep { get; set; }
 
         [JsonProperty("logradouro")]
+        [MaxLength(100)]
+
         public string? Logradouro { get; set; }
 
         [JsonProperty("complemento")]
+        [MaxLength(100)]
         public string? Complemento { get; set; }
 
         [JsonProperty("bairro")]
@@ -22,7 +26,9 @@ namespace APP.Domain.Entities
         public string? Localidade { get; set; }
 
         [JsonProperty("uf")]
-        public string? Uf { get; set; }
+        public String? Uf { get; set; }
+        [JsonIgnore]
+        public string? Erro { get; set; }
 
     }
 

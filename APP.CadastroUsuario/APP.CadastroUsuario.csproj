@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API.Domain\APP.Domain.csproj" />
+    <ProjectReference Include="..\API.Infra.Data\API.Infra.Data.csproj" />
+    <ProjectReference Include="..\API.Services\API.Services.csproj" />
   </ItemGroup>
 
 </Project>
