@@ -10,28 +10,30 @@
 <h4>@Model?.Erro</h4>
 
 <form method="post" action="Create">
-    <div class="form-group">
-        <label for="id">Id</label>
-        <input type="number" id="id" name="id" class="form-control" value=@Model?.Id />
-    </div>
+    <div class="form-group row">
+        <div class=" col-md-6">
+            <label for="id">Id</label>
+            <input type="number" id="id" name="id" class="form-control" value=@Model?.Id />
+        </div>
 
-    <div class="form-group">
-        <label for="Nome">Nome</label>
-        <input type="text" id="Nome" name="Nome" class="form-control" value=@Model?.Nome />
+        <div class="col-md-6">
+            <label for="Nome">Nome</label>
+            <input type="text" id="Nome" name="Nome" class="form-control" value=@Model?.Nome autocomplete="on" />
+        </div>
     </div>
 
     <div class="form-group">
         <label for="Idade">Idade</label>
-        <input type="number" pattern="[0-9]" id="Idade" name="Idade" class="form-control" value=@Model?.Idade />
+        <input type="text" maxlength="2" id="Idade" name="Idade" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value=@Model?.Idade />
     </div>
 
     <div class="form-group">
         <label for="cep">CEP</label>
-        <input type="number" pattern="[0-9]" id="cep" name="cep" class="form-control" maxlength="8" value=@Model?.Cep />
+        <input type="text" id="cep" name="cep" class="form-control" maxlength="8" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value=@Model?.Cep />
     </div>
     <div class="form-group">
         <label for="logradouro">Logradouro</label>
-        <input type="text" id="logradouro" name="logradouro" readonly class="form-control" value=@Model?.Logradouro />
+        <input type="text" id="logradouro" name="logradouro" class="form-control" value=@Model?.Logradouro />
     </div>
     <div class="form-group">
         <label for="bairro">Bairro</label>
@@ -39,15 +41,16 @@
     </div>
     <div class="form-group">
         <label for="localidade">Localidade</label>
-        <input type="text" id="localidade" name="localidade" class="form-control" value=@Model?.Localidade />
+        <input type="text" id="localidade" readonly name="localidade" class="form-control" value=@Model?.Localidade />
     </div>
     <div class="form-group">
         <label for="uf">UF</label>
-        <input type="text" id="uf" name="uf" class="form-control" value=@Model?.Uf />
+        <input type="text" id="uf" name="uf" readonly class="form-control" value=@Model?.Uf />
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
 
 </form>
+
 <div>
 
     <a asp-action="Index">Back to List</a>

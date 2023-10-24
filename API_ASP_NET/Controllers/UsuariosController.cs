@@ -4,7 +4,9 @@ using API.Services.Validators;
 using System.Net;
 using APP.Domain.Interfaces;
 using FluentValidation.Validators;
-
+using System.Xml;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace API_ASP_NET.Controllers
 {
@@ -61,6 +63,12 @@ namespace API_ASP_NET.Controllers
             if (user == null)
                 return NotFound();
 
+            List<Usuarios> ListaUsuarios = _usuariosService.SelectAll().ToList();
+            var Exist =  ListaUsuarios.Exists(x=>x.Id == user.Id);
+
+            if (Exist)
+                user.Id += 1000;
+
             return Execute(() => _usuariosService.Insert<UsuarioValidator>(user));
         }
 
@@ -99,5 +107,7 @@ namespace API_ASP_NET.Controllers
         }
 
 
+      
     }
 }
+
