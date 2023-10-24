@@ -37,6 +37,7 @@ namespace APP.CadastroUsuario.Controllers
         {
             try
             {
+                item.ChannelType = "Web";
                 var Insert = await _Request.PostAsync(item);
                 Insert.EnsureSuccessStatusCode();
 
@@ -73,6 +74,7 @@ namespace APP.CadastroUsuario.Controllers
         {
             try
             {
+                item.ChannelType = "Web";
                 var Update = await _Request.EnviarPutAsync(item);
                 return RedirectToAction("Index");
             }

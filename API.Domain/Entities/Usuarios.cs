@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace APP.Domain.Entities
 {
     public class Usuarios : BaseEntity
-    {    
+    {
+        public String? ChannelType { get; set; }
         public String? Nome { get; set; }
         public int Idade { get; set; }
         [JsonProperty("cep")]
@@ -27,9 +29,26 @@ namespace APP.Domain.Entities
 
         [JsonProperty("uf")]
         public String? Uf { get; set; }
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public string? Erro { get; set; }
 
-    }
+        public void ProcessRequests(string? Channel)
+        {
+            switch (Channel)
+            {
+                case "Api":
+                    ChannelType = Channel;
+                    break;
+                case "Web":
+                    ChannelType = Channel;
+                    break;
+                default:
+                    ChannelType = "Tipo Desconhecido";
+                    break;
+            }
+        }
 
+    }
 }
+
+

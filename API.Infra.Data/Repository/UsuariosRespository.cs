@@ -12,18 +12,16 @@ namespace API.Infra.Data.Repository
         }
         public List<Usuarios> GetLista()
         {
-            if (ListaUsuarios == null || ListaUsuarios.Count == 0)
+            if (ListaUsuarios.Count == 0)
             {
                 ListaUsuarios = new List<Usuarios>()
                {
-                new Usuarios {Id = 1, Nome = "Felipe" },
-                new Usuarios {Id = 2, Nome = "Admin" }
+                new Usuarios {Id = 2, Nome = "Admin Teste" }
                };
-
             }
             return ListaUsuarios;
         }
-  
+
         public IList<Usuarios> SelectAll()
         {
             return ListaUsuarios;
@@ -31,52 +29,32 @@ namespace API.Infra.Data.Repository
 
         public Usuarios SelectById(int id)
         {
-            try
-            {             
-                return ListaUsuarios.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
+            return ListaUsuarios.First(x => x.Id == id);
 
-                throw;
-            }
         }
 
         public void Insert(Usuarios user)
         {
-            try
-            {
-                ListaUsuarios.Add(user);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            ListaUsuarios.Add(user);
         }
 
         public void Update(Usuarios user)
         {
-            try
-            {
-                var User_For_Update = ListaUsuarios.FirstOrDefault(x => x.Id == user.Id);
+            var User_For_Update = ListaUsuarios.FirstOrDefault(x => x.Id == user.Id);
 
-                if (User_For_Update != null)
-                {
-                    User_For_Update.Nome = user.Nome;
-                    User_For_Update.Cep = user.Cep;
-                    User_For_Update.Bairro = user.Bairro;
-                    User_For_Update.Logradouro = user.Logradouro;
-                    User_For_Update.Uf = user.Uf;
-                    User_For_Update.Localidade = user.Localidade;
-                    User_For_Update.Localidade = user.Localidade;
-                    User_For_Update.Idade = user.Idade;
-                }
-            }
-            catch (Exception)
+            if (User_For_Update != null)
             {
-
-                throw;
+                User_For_Update.Nome = user.Nome;
+                User_For_Update.Cep = user.Cep;
+                User_For_Update.Bairro = user.Bairro;
+                User_For_Update.Logradouro = user.Logradouro;
+                User_For_Update.Uf = user.Uf;
+                User_For_Update.Localidade = user.Localidade;
+                User_For_Update.Localidade = user.Localidade;
+                User_For_Update.Idade = user.Idade;
+                User_For_Update.ChannelType = user.ChannelType;
             }
         }
+
     }
 }
