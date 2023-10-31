@@ -6,7 +6,7 @@ namespace APP.Domain.Entities
 {
     public class Usuarios : BaseEntity
     {
-        public String? ChannelType { get; set; }
+
         public String? Nome { get; set; }
         public int Idade { get; set; }
         [JsonProperty("cep")]
