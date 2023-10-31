@@ -7,6 +7,8 @@ using FluentValidation.Validators;
 using System.Xml;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq;
 
 namespace API_ASP_NET.Controllers
 {
@@ -88,12 +90,25 @@ namespace API_ASP_NET.Controllers
         private void ValidationExistId(Usuarios user)
         {
             List<Usuarios> ListaUsuarios = _usuariosService.SelectAll().ToList();
-            var Exist = ListaUsuarios.Exists(x => x.Id == user.Id);
 
-            if (Exist || user.Id == 0 || user.Id == null)
-                user.Id += 1000;
+            user.Id = GenerateId(ListaUsuarios);
+        }
+
+        public int GenerateId(List<Usuarios> list)
+        {
+            int id = 1;
+
+            // Verifique se o ID existe na lista
+            while (list.Any(x => x.Id == id))
+            {
+                id++;
+            }
+
+            return id;
         }
 
     }
+
+
 }
 
