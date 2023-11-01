@@ -56,5 +56,37 @@ namespace API.Infra.Data.Repository
             }
         }
 
+        public int GenerateId(List<Usuarios> list)
+        {
+            int id = 1;
+
+            // Verifique se o ID existe na lista
+            while (list.Any(x => x.Id == id))
+            {
+                id++;
+            }
+
+            return id;
+        }
+
+        public void ProcessRequests(string? Channel)
+        {
+            Usuarios obj = new Usuarios();
+            switch (Channel)
+            {
+                case "Api":
+                    obj.ChannelType = Channel;
+                    break;
+                case "Web":
+                    obj.ChannelType = Channel;
+                    break;
+                default:
+                    obj.ChannelType = "Tipo Desconhecido";
+                    break;
+            }
+        }
+
+
+
     }
 }
