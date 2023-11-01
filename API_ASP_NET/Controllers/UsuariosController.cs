@@ -17,9 +17,11 @@ namespace API_ASP_NET.Controllers
     public class UsuariosController : ControllerBase
     {
         private IUsuariosService<Usuarios> _usuariosService;
-        public UsuariosController(IUsuariosService<Usuarios> usuariosService)
+        private IUsuariosRepository<Usuarios> _usuariosRepository;
+        public UsuariosController(IUsuariosService<Usuarios> usuariosService, IUsuariosRepository<Usuarios> usuariosRepository)
         {
             _usuariosService = usuariosService;
+            _usuariosRepository = usuariosRepository;
         }
 
         // GET: api/Usuarios/GetUsuarios
@@ -44,7 +46,7 @@ namespace API_ASP_NET.Controllers
             if (user == null)
                 return NotFound();
 
-            user.ProcessRequests(user.ChannelType);
+            _usuariosRepository.ProcessRequests(user.ChannelType);
 
             ValidationExistId(user);
 
@@ -58,7 +60,7 @@ namespace API_ASP_NET.Controllers
             if (user == null)
                 return NotFound();
 
-            user.ProcessRequests(user.ChannelType);
+            _usuariosRepository.ProcessRequests(user.ChannelType);
 
             return Execute(() => _usuariosService.Update<UsuarioValidator>(user));
         }
@@ -91,22 +93,10 @@ namespace API_ASP_NET.Controllers
         {
             List<Usuarios> ListaUsuarios = _usuariosService.SelectAll().ToList();
 
-            user.Id = GenerateId(ListaUsuarios);
+            user.Id = _usuariosRepository.GenerateId(ListaUsuarios);
         }
 
-        public int GenerateId(List<Usuarios> list)
-        {
-            int id = 1;
-
-            // Verifique se o ID existe na lista
-            while (list.Any(x => x.Id == id))
-            {
-                id++;
-            }
-
-            return id;
-        }
-
+      
     }
 
 

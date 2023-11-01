@@ -32,22 +32,7 @@ namespace APP.Domain.Entities
         [System.Text.Json.Serialization.JsonIgnore]
         public string? Erro { get; set; }
 
-        public void ProcessRequests(string? Channel)
-        {
-            switch (Channel)
-            {
-                case "Api":
-                    ChannelType = Channel;
-                    break;
-                case "Web":
-                    ChannelType = Channel;
-                    break;
-                default:
-                    ChannelType = "Tipo Desconhecido";
-                    break;
-            }
-        }
-
+  
     }
 }
 

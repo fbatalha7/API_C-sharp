@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "API_Desafio_Tecnico",
-        Description = "Api desenvolvida para desafio tecnico Bemol.",
+        Description = "Api desenvolvida para desafio tecnico.",
     });
     c.AddSecurityDefinition(
         "Bearer",
